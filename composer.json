@@ -1,8 +1,7 @@
 {
-    "name": "sanabuk/driver",
-    "description": "test package",
+  "name": "sanabuk/driver",
+  "description": "test package",
   "homepage": "http://github.com/sanabuk/driver",
-  "license": "MIT",
   "authors": [
     {
       "name": "sanabuk",
