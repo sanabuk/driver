@@ -8,7 +8,7 @@ class DriverServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->loadMigrationsFrom('/sanabuck/driver/src/migrations');
+        $this->loadMigrationsFrom('/sanabuk/driver/src/migrations');
     }
 
     public function register()
