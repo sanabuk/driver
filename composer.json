@@ -1,0 +1,6 @@
+{
+    "name": "sanabuck/driver",
+    "description": "test package",
+    "minimum-stability": "dev-master",
+    "require": {}
+}
