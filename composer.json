@@ -1,6 +1,21 @@
 {
     "name": "sanabuk/driver",
     "description": "test package",
-    "minimum-stability": "dev-master",
-    "require": {}
+  "homepage": "http://github.com/sanabuk/driver",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "sanabuk",
+      "email": "gui_dev@orange.fr"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "illuminate/support": "~5.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "sanabuck\\driver\\": "src/"
+    }
+  }
 }
