@@ -1,5 +1,5 @@
 <?php
-namespace sanabuck\driver;
+namespace sanabuk\driver;
 
 use Illuminate\Support\ServiceProvider;
 
