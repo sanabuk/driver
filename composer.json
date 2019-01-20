@@ -1,7 +1,7 @@
 {
   "name": "sanabuk/driver",
   "description": "test package",
-  "homepage": "http://github.com/sanabuk/driver",
+  "homepage": "https://github.com/sanabuk/driver",
   "authors": [
     {
       "name": "sanabuk",
@@ -14,7 +14,14 @@
   },
   "autoload": {
     "psr-4": {
-      "sanabuk\\driver\\": "/"
+      "sanabuk\\driver\\": "/src"
     }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.2"
+        }
   }
 }
