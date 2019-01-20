@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "sanabuk\\driver\\": "/src"
+      "sanabuk\\driver\\": "/"
     }
   },
   "minimum-stability": "dev",
