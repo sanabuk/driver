@@ -1,6 +1,6 @@
 <?php
 
-namespace sanabuk/driver;
+namespace sanabuk\driver;
 
 /**
  * Create Driver
