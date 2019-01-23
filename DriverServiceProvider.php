@@ -2,8 +2,6 @@
 namespace sanabuk\driver;
 
 use Illuminate\Support\ServiceProvider;
-use sanabuk\driver\Driver;
-use sanabuk\driver\CreateDriver;
 
 class DriverServiceProvider extends ServiceProvider
 {
@@ -20,7 +18,7 @@ class DriverServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('CreateDriver', function ($app) {
-            return new CreateDriver();
+            return new \CreateDriver();
         });
     }
 

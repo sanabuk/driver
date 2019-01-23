@@ -15,4 +15,9 @@ class Driver extends Model
     {
     	$this->name = 'bob';
     }*/
+
+    public function user()
+    {
+    	return $this->belongsTo('App\User');
+    }
 }
