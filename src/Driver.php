@@ -9,7 +9,7 @@ class Driver extends Model
 	protected $fillable = ['name'];
 
 	protected $primaryKey = 'id';
-	protected $table = 'drivers2';
+	protected $table = 'drivers';
 	/*
     public function __construct()
     {
