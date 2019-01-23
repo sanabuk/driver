@@ -18,7 +18,11 @@ class DriverServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('CreateDriver', function ($app) {
-            return new \CreateDriver();
+            return new CreateDriver();
+        });
+
+        $this->app->bind('AssociateDriverWithUser', function ($app) {
+            return new AssociateDriverWithUser();
         });
     }
 
