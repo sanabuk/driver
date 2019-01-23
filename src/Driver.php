@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Driver extends Model
 {
-	protected $fillable = ['name'];
+	protected $fillable = ['name','user_id'];
 
 	protected $primaryKey = 'id';
 	protected $table = 'drivers';
