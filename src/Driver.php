@@ -10,11 +10,6 @@ class Driver extends Model
 
 	protected $primaryKey = 'id';
 	protected $table = 'drivers';
-	/*
-    public function __construct()
-    {
-    	$this->name = 'bob';
-    }*/
 
     public function user()
     {
