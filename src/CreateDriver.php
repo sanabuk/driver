@@ -10,6 +10,6 @@ class CreateDriver extends Driver
 {
 	public function handler(array $array)
 	{
-		return Driver::create($array);
+		return $this->create($array);
 	}
 }
