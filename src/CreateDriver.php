@@ -1,20 +1,15 @@
 <?php
+namespace sanabuk\driver;
 
-namespace sanabuk/driver;
+use sanabuk\driver\Driver;
 
 /**
  * Create Driver
  */
 class CreateDriver extends Driver
 {
-	
-	function __construct(argument)
-	{
-		# code...
-	}
-
 	public function handler(array $array)
 	{
-		return Driver::create($array);
+		return $this->create($array);
 	}
 }

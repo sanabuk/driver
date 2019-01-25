@@ -10,9 +10,14 @@ class Driver extends Model
 
 	protected $primaryKey = 'id';
 	protected $table = 'drivers';
-	/*
-    public function __construct()
+
+    public function user()
     {
-    	$this->name = 'bob';
-    }*/
+    	return $this->belongsTo('App\User');
+    }
+
+    public function vehicles()
+    {
+    	return $this->hasMany(Vehicle::class)->orderBy('created_at');
+    }
 }
