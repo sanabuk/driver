@@ -15,4 +15,9 @@ class Driver extends Model
     {
     	return $this->belongsTo('App\User');
     }
+
+    public function vehicles()
+    {
+    	return $this->hasMany(Vehicle::class)->orderBy('created_at');
+    }
 }

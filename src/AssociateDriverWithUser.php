@@ -20,6 +20,12 @@ class AssociateDriverWithUser extends Driver
 	}
 
 	/**
+	 * On peut imaginer ici énoncer les contraintes spécifiques
+	 */
+
+	#region Constrains
+
+	/**
 	 * Un user ne peut pas avoir plus de X drivers
 	 * @param Model
 	 * @mixed
@@ -29,4 +35,5 @@ class AssociateDriverWithUser extends Driver
 		if($model->drivers->count() > 10) throw new Exception("Cet utilisateur a déjà le maximum de drivers.(".$model->drivers->count().")", 403);
 	}
 
+	#endregion
 }
