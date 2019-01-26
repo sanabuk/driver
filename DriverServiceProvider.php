@@ -18,7 +18,7 @@ class DriverServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('Driver', function ($app) {
-            return new Driver();
+            $driver = new Driver();
         });
 
         $this->app->bind('CreateDriver', function ($app) {

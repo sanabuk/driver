@@ -17,4 +17,9 @@ class HistoryDriverVehicle extends Model
     {
         return $this->where('vehicle_id',$id);
     }
+
+    public function driver()
+    {
+    	return $this->belongsTo(Driver::class);
+    }
 }
