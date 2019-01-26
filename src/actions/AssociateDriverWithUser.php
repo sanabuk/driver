@@ -1,9 +1,9 @@
 <?php
 
-namespace sanabuk\driver;
+namespace sanabuk\driver\actions;
 
 use Illuminate\Database\Eloquent\Model;
-use sanabuk\driver\Driver;
+use sanabuk\driver\models\Driver;
 use Exception;
 
 class AssociateDriverWithUser extends Driver
@@ -32,7 +32,7 @@ class AssociateDriverWithUser extends Driver
 	 */
 	public function testEligibilityUser(Model $model)
 	{
-		if($model->drivers->count() > 10) throw new Exception("Cet utilisateur a déjà le maximum de drivers.(".$model->drivers->count().")", 403);
+		if($model->drivers->count() > 1000) throw new Exception("Cet utilisateur a déjà le maximum de drivers.(".$model->drivers->count().")", 403);
 	}
 
 	#endregion

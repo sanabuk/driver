@@ -1,6 +1,6 @@
 <?php
 
-namespace sanabuk\driver;
+namespace sanabuk\driver\models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,8 +16,8 @@ class Driver extends Model
     	return $this->belongsTo('App\User');
     }
 
-    public function vehicles()
+    public function vehicle()
     {
-    	return $this->hasMany(Vehicle::class)->orderBy('created_at');
+    	return $this->hasOne(Vehicle::class);
     }
 }

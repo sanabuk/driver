@@ -1,7 +1,7 @@
 <?php
-namespace sanabuk\driver;
+namespace sanabuk\driver\actions;
 
-use sanabuk\driver\Driver;
+use sanabuk\driver\models\Driver;
 
 /**
  * Create Driver
