@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use sanabuk\driver\models\Driver;
 use sanabuk\driver\actions\CreateDriver;
 use sanabuk\driver\actions\AssociateDriverWithUser;
+use sanabuk\driver\resources\GetHistoric;
 
 class DriverServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,10 @@ class DriverServiceProvider extends ServiceProvider
 
         $this->app->bind('AssociateDriverWithUser', function ($app) {
             return new AssociateDriverWithUser();
+        });
+
+        $this->app->bind('GetHistoric', function ($app) {
+            return new GetHistoric();
         });
     }
 
