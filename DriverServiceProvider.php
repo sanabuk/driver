@@ -2,6 +2,9 @@
 namespace sanabuk\driver;
 
 use Illuminate\Support\ServiceProvider;
+use sanabuk\driver\models\Driver;
+use sanabuk\driver\actions\CreateDriver;
+use sanabuk\driver\actions\AssociateDriverWithUser;
 
 class DriverServiceProvider extends ServiceProvider
 {

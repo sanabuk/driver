@@ -1,6 +1,6 @@
 <?php
 
-namespace sanabuk\driver;
+namespace sanabuk\driver\models;
 
 use Illuminate\Database\Eloquent\Model;
 
