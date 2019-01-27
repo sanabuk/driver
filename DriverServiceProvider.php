@@ -29,6 +29,10 @@ class DriverServiceProvider extends ServiceProvider
             return new AssociateDriverWithUser();
         });
 
+        $this->app->bind('AssociateDriverWithVehicle', function ($app) {
+            return new AssociateDriverWithVehicle();
+        });
+
         $this->app->bind('GetHistoric', function ($app) {
             return new GetHistoric();
         });
