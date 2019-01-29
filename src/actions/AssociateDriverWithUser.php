@@ -11,7 +11,7 @@ class AssociateDriverWithUser extends Driver
 	public function handler(Driver $driver, Model $model)
 	{
 		try{
-			$this->testEligibilityUser($model);
+			$this->eligibilityUser($model);
 			$driver->user()->associate($model);
 			$driver->save();
 		} catch (Exception $e){
@@ -21,6 +21,7 @@ class AssociateDriverWithUser extends Driver
 
 	/**
 	 * On peut imaginer ici énoncer les contraintes spécifiques
+	 * fake example :
 	 */
 
 	#region Constrains
@@ -30,7 +31,7 @@ class AssociateDriverWithUser extends Driver
 	 * @param Model
 	 * @mixed
 	 */
-	public function testEligibilityUser(Model $model)
+	public function eligibilityUser(Model $model)
 	{
 		if($model->drivers->count() > 1000) throw new Exception("Cet utilisateur a déjà le maximum de drivers.(".$model->drivers->count().")", 403);
 	}
