@@ -3,6 +3,7 @@
 namespace sanabuk\driver\models;
 
 use Illuminate\Database\Eloquent\Model;
+use sanabuk\driver\scopes\UserScope;
 
 class Driver extends Model
 {
@@ -10,6 +11,12 @@ class Driver extends Model
 
 	protected $primaryKey = 'id';
 	protected $table = 'drivers';
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new UserScope);
+    }
 
     public function user()
     {
@@ -20,4 +27,9 @@ class Driver extends Model
     {
     	return $this->hasOne(Vehicle::class);
     }
+
+    public function historic()
+    {
+        return $this->hasMany(HistoryDriverVehicle::class)->orderBy('updated_at');
+    } 
 }
