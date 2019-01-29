@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Groupment Model
+ * 
+ * 'Groupment' (grouping) represents the association between a group and the various elements that compose it
  */
 class Groupment extends Model
 {
