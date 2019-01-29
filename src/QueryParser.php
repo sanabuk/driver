@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  * 
  * Test to generate Eloquent Request with Url Parameters
  * 
- * example Route : base_request/{model}?equals[]=id:1&fields[]=id,name&includes[]=drivers
+ * example Route : {startModel}?includes=model1,model2&equals[]=id:1&max[model1]=id:100&min[model2]=id:70
  * */
 
 trait QueryParser
