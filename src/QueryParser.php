@@ -149,7 +149,7 @@ trait QueryParser
 
     private function addIncludes($query, $relations,$param, $counter = 0)
     {
-    	$query = $query->with([$relations[$counter] /*=> $this->getCallback($relations, $counter, $param)*/]);
+    	$query = $query->with([$relations[$counter] => $this->getCallback($relations, $counter, $param)]);
 	    return $query;
     }
 
