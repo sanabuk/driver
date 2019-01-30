@@ -24,6 +24,15 @@ class HistoryDriverVehicle extends Model
     }
 
     /**
+     * Get relation with vehicle
+     * @return BelongsToRelation
+     */
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    /**
      * Scope filterByDriverId
      * @param integer $id
      * @return QueryBuilder
