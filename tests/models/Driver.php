@@ -1,6 +1,6 @@
 <? php
 
-namespace sanabuk\driver\tests/models;
+namespace sanabuk\driver\tests\models;
 
 use sanabuk\driver\Driver as DriverToTest
 
