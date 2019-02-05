@@ -29,7 +29,7 @@ class AssociateDriverWithVehicle extends Vehicle
     {
         try {
             $this->detachDriverToVehicle($model);
-            $this->attachDriverToVehicle($vehicle, $model)
+            $this->attachDriverToVehicle($vehicle, $model);
         } catch (Exception $e) {
             throw $e;
         }
