@@ -5,6 +5,7 @@ use Illuminate\Support\ServiceProvider;
 use sanabuk\driver\models\Driver;
 use sanabuk\driver\actions\CreateDriver;
 use sanabuk\driver\actions\AssociateDriverWithUser;
+use sanabuk\driver\actions\AssociateDriverWithVehicle;
 use sanabuk\driver\resources\GetHistoric;
 
 class DriverServiceProvider extends ServiceProvider
