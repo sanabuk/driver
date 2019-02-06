@@ -19,8 +19,6 @@ trait QueryParser
         $queryParamUrl = $request->all();
         $paramBuilder  = $this->split($queryParamUrl);
 
-        //dd($paramBuilder);
-
         $query   = $this->generateQuery($query, $paramBuilder);
         $perpage = $request->get('perpage', 15);
         return $query;
@@ -116,13 +114,13 @@ trait QueryParser
                     break;
                 case 'min':
                     foreach ($value as $v) {
-                        $query = $this->addWhere($query, explode(':', $v)[0], explode(':', $v)[1], '>');
+                        $query = $this->addWhere($query, explode(':', $v)[0], explode(':', $v)[1], '>=');
                     }
                     //
                     break;
                 case 'max':
                     foreach ($value as $v) {
-                        $query = $this->addWhere($query, explode(':', $v)[0], explode(':', $v)[1], '<');
+                        $query = $this->addWhere($query, explode(':', $v)[0], explode(':', $v)[1], '<=');
                     }
                     //
                     break;
@@ -194,8 +192,8 @@ trait QueryParser
                         $operator = [
                             'like'   => 'like',
                             'equals' => '=',
-                            'min'    => '>',
-                            'max'    => '<',
+                            'min'    => '>=',
+                            'max'    => '<=',
                         ];
                         $q = $this->addWhere($q, explode(':', $v)[0], explode(':', $v)[1], $operator[$key]);
                     }
@@ -215,8 +213,8 @@ trait QueryParser
                         $operator = [
                             'like'   => 'like',
                             'equals' => '=',
-                            'min'    => '>',
-                            'max'    => '<',
+                            'min'    => '>=',
+                            'max'    => '<=',
                         ];
                         $q = $q->whereHas($model, function ($query) use ($v, $key, $operator) {
                             $this->addWhere($query, explode(':', $v)[0], explode(':', $v)[1], $operator[$key]);

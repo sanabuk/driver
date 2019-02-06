@@ -34,7 +34,7 @@ class AssociateDriverWithVehicle extends Vehicle
         }
     }
 
-    public function detachDriverToVehicle(Driver $model, $vehicle)
+    public function detachDriverToVehicle($model, $vehicle)
     {
         if (count($model->vehicle) > 0) {
             $model->vehicle()->update(['driver_id' => null]);
