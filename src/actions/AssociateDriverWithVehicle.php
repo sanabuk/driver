@@ -16,6 +16,16 @@ use sanabuk\driver\strategies\AssociationDriverVehicleStrategy;
  * */
 class AssociateDriverWithVehicle extends Vehicle
 {
+    protected $associationDriverVehicleStrategy;
+
+    /**
+     * On injecte les règles métiers 
+     * */
+    public function __construct(AssociationDriverVehicleStrategy $associationDriverVehicleStrategy)
+    {
+        $this->associationDriverVehicleStrategy = $associationDriverVehicleStrategy;
+    }
+
     /**
      * Handling OneToOne Relation (Driver->Vehicle)
      * TODO Refactoring model->model
@@ -29,8 +39,7 @@ class AssociateDriverWithVehicle extends Vehicle
     public function handler($vehicle, $driver, $data = null)
     {
         try {
-            $associationDriverVehicleStrategy = new AssociationDriverVehicleStrategy();
-            $associationDriverVehicleStrategy($data, $driver, $vehicle);
+            $this->associationDriverVehicleStrategy($data, $driver, $vehicle);
             $this->detachDriverToVehicle($driver, $vehicle);
             $this->attachDriverToVehicle($vehicle, $driver);
         } catch (Exception $e) {
@@ -38,6 +47,12 @@ class AssociateDriverWithVehicle extends Vehicle
         }
     }
 
+    /**
+     * Detach Driver and Vehicle
+     * @param Driver|nullable $driver
+     * @param Vehicle|nullable $vehicle
+     * @return void
+     */
     public function detachDriverToVehicle($driver, $vehicle)
     {
         if (count($driver->vehicle) > 0) {
@@ -45,6 +60,12 @@ class AssociateDriverWithVehicle extends Vehicle
         }
     }
 
+    /**
+     * Attach Driver and Vehicle
+     * @param Driver|nullable $driver
+     * @param Vehicle|nullable $vehicle
+     * @return void
+     */
     public function attachDriverToVehicle($vehicle, $driver)
     {
         if (!is_null($vehicle) && !is_null($driver->id)) {
@@ -52,12 +73,4 @@ class AssociateDriverWithVehicle extends Vehicle
             $vehicle->save();
         }
     }
-
-    /**
-     * On peut imaginer ici énoncer les contraintes d'association spécifiques
-     */
-
-    #region Constrains
-
-    #endregion
 }
