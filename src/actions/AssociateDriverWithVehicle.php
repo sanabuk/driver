@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use sanabuk\driver\models\Driver;
 use sanabuk\driver\models\Vehicle;
+use sanabuk\driver\strategies\AssociationDriverVehicleStrategy;
 
 /**
  * Handling the association between Driver and Vehicle
@@ -20,33 +21,34 @@ class AssociateDriverWithVehicle extends Vehicle
      * TODO Refactoring model->model
      *
      * @param Model|Nullable $vehicle
-     * @param Model|Nullable $model
+     * @param Model|Nullable $driver
+     * @param array $data
      * @throws Exception $e
      * @return void
      * */
-    public function handler($vehicle, $model)
+    public function handler($vehicle, $driver, $data = null)
     {
         try {
-            $this->detachDriverToVehicle($model, $vehicle);
-            $this->attachDriverToVehicle($vehicle, $model);
+            $associationDriverVehicleStrategy = new AssociationDriverVehicleStrategy();
+            $associationDriverVehicleStrategy($data, $driver, $vehicle);
+            $this->detachDriverToVehicle($driver, $vehicle);
+            $this->attachDriverToVehicle($vehicle, $driver);
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function detachDriverToVehicle($model, $vehicle)
+    public function detachDriverToVehicle($driver, $vehicle)
     {
-        if (count($model->vehicle) > 0) {
-            $model->vehicle()->update(['driver_id' => null]);
-            $vehicle->driver()->dissociate();
-            $vehicle->save();
+        if (count($driver->vehicle) > 0) {
+            $driver->vehicle()->update(['driver_id' => null]);
         }
     }
 
-    public function attachDriverToVehicle(Vehicle $vehicle, $model)
+    public function attachDriverToVehicle($vehicle, $driver)
     {
-        if (!is_null($vehicle) && !is_null($model->id)) {
-            $vehicle->driver()->associate($model->id);
+        if (!is_null($vehicle) && !is_null($driver->id)) {
+            $vehicle->driver()->associate($driver->id);
             $vehicle->save();
         }
     }
