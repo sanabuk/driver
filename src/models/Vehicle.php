@@ -3,12 +3,15 @@
 namespace sanabuk\driver\models;
 
 use Illuminate\Database\Eloquent\Model;
+use sanabuk\driver\Groupable;
 
 /**
  * Vehicle Model
  */
 class Vehicle extends Model
 {
+	use Groupable;
+	
 	protected $table = 'vehicles';
 
 	protected $fillable = ['license_number','color','brand','driver_id'];

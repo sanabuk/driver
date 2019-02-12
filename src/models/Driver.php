@@ -4,6 +4,7 @@ namespace sanabuk\driver\models;
 
 use Illuminate\Database\Eloquent\Model;
 use sanabuk\driver\scopes\UserScope;
+use sanabuk\driver\Groupable;
 
 /**
  * Driver Model
@@ -16,6 +17,8 @@ use sanabuk\driver\scopes\UserScope;
  */
 class Driver extends Model
 {
+    use Groupable;
+
 	protected $fillable = ['name','user_id'];
 	protected $primaryKey = 'id';
 	protected $table = 'drivers';
@@ -40,9 +43,4 @@ class Driver extends Model
     {
         return $this->hasMany(HistoryDriverVehicle::class)->orderBy('updated_at');
     }
-
-    public function groups()
-    {
-        return $this->morphToMany(Group::class,'groupment');
-    } 
 }
