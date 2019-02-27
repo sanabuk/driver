@@ -23,6 +23,8 @@ class Driver extends Model
 	protected $primaryKey = 'id';
 	protected $table = 'drivers';
 
+    protected $hidden = ['created_at','updated_at'];
+
     protected static function boot()
     {
         parent::boot();
@@ -36,11 +38,13 @@ class Driver extends Model
 
     public function vehicle()
     {
+        //return $this->historic()->where('updated_at',null);
     	return $this->hasOne(Vehicle::class);
+        //return $this->hasOne(HistoryDriverVehicle::class)->where('updated_at',null);
     }
 
     public function historic()
     {
-        return $this->hasMany(HistoryDriverVehicle::class)->orderBy('updated_at');
+        return $this->hasMany(HistoryDriverVehicle::class)->with('vehicle')->latest();
     }
 }

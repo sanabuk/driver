@@ -3,6 +3,8 @@
 namespace sanabuk\driver\actions;
 
 use Exception;
+use DB;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use sanabuk\driver\models\Driver;
 use sanabuk\driver\models\Vehicle;
@@ -39,7 +41,7 @@ class AssociateDriverWithVehicle extends Vehicle
     public function handler($vehicle, $driver, $data = null)
     {
         try {
-            $this->associationDriverVehicleStrategy($data, $driver, $vehicle);
+            $this->associationDriverVehicleStrategy->apply($data, $driver, $vehicle);
             $this->detachDriverToVehicle($driver, $vehicle);
             $this->attachDriverToVehicle($vehicle, $driver);
         } catch (Exception $e) {
@@ -57,6 +59,17 @@ class AssociateDriverWithVehicle extends Vehicle
     {
         if (count($driver->vehicle) > 0) {
             $driver->vehicle()->update(['driver_id' => null]);
+            DB::table('vehicle_driver_history')
+                ->where('driver_id',$driver->id)
+                ->whereNull('updated_at')
+                ->update(['updated_at'=>Carbon::now()]);
+        }
+
+        if (count($vehicle->driver) > 0) {
+            DB::table('vehicle_driver_history')
+                ->where('vehicle_id',$vehicle->id)
+                ->whereNull('updated_at')
+                ->update(['updated_at'=>Carbon::now()]);
         }
     }
 
@@ -71,6 +84,7 @@ class AssociateDriverWithVehicle extends Vehicle
         if (!is_null($vehicle) && !is_null($driver->id)) {
             $vehicle->driver()->associate($driver->id);
             $vehicle->save();
+            DB::table('vehicle_driver_history')->insert(['driver_id'=>$driver->id,'vehicle_id'=>$vehicle->id,'created_at'=>Carbon::now(),'updated_at'=>null]);
         }
     }
 }

@@ -16,6 +16,8 @@ class Vehicle extends Model
 
 	protected $fillable = ['license_number','color','brand','driver_id'];
 
+	protected $hidden = ['created_at','updated_at','driver_id'];
+
 	public function driver()
 	{
 		return $this->belongsTo(Driver::class);
@@ -23,6 +25,6 @@ class Vehicle extends Model
 
 	public function historic()
     {
-        return $this->hasMany(HistoryDriverVehicle::class)->orderBy('updated_at');
+        return $this->hasMany(HistoryDriverVehicle::class)->with('driver')->latest();
     }
 }
