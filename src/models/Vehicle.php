@@ -3,15 +3,20 @@
 namespace sanabuk\driver\models;
 
 use Illuminate\Database\Eloquent\Model;
+use sanabuk\driver\Groupable;
 
 /**
  * Vehicle Model
  */
 class Vehicle extends Model
 {
+	use Groupable;
+	
 	protected $table = 'vehicles';
 
 	protected $fillable = ['license_number','color','brand','driver_id'];
+
+	protected $hidden = ['created_at','updated_at','driver_id'];
 
 	public function driver()
 	{
@@ -20,6 +25,6 @@ class Vehicle extends Model
 
 	public function historic()
     {
-        return $this->hasMany(HistoryDriverVehicle::class)->orderBy('updated_at');
+        return $this->hasMany(HistoryDriverVehicle::class)->with('driver')->latest();
     }
 }
