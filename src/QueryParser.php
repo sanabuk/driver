@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
  * Test to generate Eloquent Request with Url Parameters
  *
  * example Route : {startModel}?includes=model1,model2&equals[]=id:1&max[model1]=id:100&min[model2]=id:70
+ * 
+ * api/driver?includes=vehicle,historic.vehicle,historic.driver&sort[historic]=-created_at&sort[]=id&fields[historic.driver]=name&fields[historic.vehicle]=license_number
+ * $query = "driver(sort:id){id,vehicle{id,license_number,brand,color},historic(sort:created_at){driver{name},vehicle{license_number}}}";
  * */
 
 trait QueryParser
