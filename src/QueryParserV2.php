@@ -21,13 +21,9 @@ trait QueryParserV2
         $queryParamUrl = $request->get('query');
         list($conditions, $format)  = $this->split($queryParamUrl);
 
-        dump($conditions);
-        dump($format);
+        //dump($conditions);
 
-        dd();
-
-        $query   = $this->generateQuery($query, $paramBuilder);
-        $perpage = $request->get('perpage', 15);
+        $query   = $this->handlingConditions($query, $conditions);
         return $query;
     }
 
@@ -53,5 +49,105 @@ trait QueryParserV2
         $format = $parser->generate('driver'.$format,'{','}');
 
         return [$conditions,$format];
+    }
+
+    /**
+     * Gestion des conditions de la requête
+     * Equivalent WhereHas de Eloquent
+     * @param Builder $query
+     * @param array $conditions
+     * @return Builder $query
+     */ 
+    public function handlingConditions($query, $conditions)
+    {
+    	foreach($conditions as $key => $value){
+    		if(is_array($value)){
+    			foreach ($value as $key2 => $value2) {
+    				if(is_integer($key2)){
+    					// Conditions sur le modèle de base de la requête
+    					list($type,$condition) = $this->getConditionType($value2);
+    					switch ($type) {
+			                case 'equals':
+			                	list($needle, $haystack) = explode(':',$condition);
+			                    $query = $this->addWhere($query,$needle,$haystack,'=');
+			                    break;
+			                case 'like':
+			                    list($needle, $haystack) = explode(':',$condition);
+			                    $query = $this->addWhere($query,$needle,$haystack,'like');
+			                    break;
+			                case 'min':
+			                    list($needle, $haystack) = explode(':',$condition);
+			                    $query = $this->addWhere($query,$needle,$haystack,'>=');
+			                    break;
+			                case 'max':
+			                    list($needle, $haystack) = explode(':',$condition);
+			                    $query = $this->addWhere($query,$needle,$haystack,'<=');
+			                    break;
+
+			                default:
+			                    # code...
+			                    break;
+			            }
+
+    				} else {
+    					// Condition sur une relation
+    					$relation = $key2;
+    					//dump($value2);
+    					$query = $this->constrainsWhereHas($query, $relation, $value2);
+    				}
+    			}
+    		}
+    	}
+    	return $query;
+    }
+
+    private function getConditionType($value)
+    {
+    	return explode('=',$value);
+    }
+
+    private function isWhere($key)
+    {
+        return in_array($key, ['equals', 'like', 'min', 'max']);
+    }
+
+    private function addWhere($query, $column1, $column2, $operator = '=')
+    {
+        if ($operator == 'like') {
+            $column2 = '%' . $column2 . '%';
+        }
+        return $query->where($column1, $operator, $column2);
+    }
+
+    private function constrainsWhereHas($q, $model, $param)
+    {
+    	$q = $q->whereHas($model, function($query) use ($param){
+    		foreach ($param as $key => $value) {
+    			if(is_integer($key)){
+    				list($type,$condition) = $this->getConditionType($value);
+    				list($needle, $haystack) = explode(':',$condition);
+					switch ($type) {
+		                case 'equals':
+		                    $query = $this->addWhere($query,$needle,$haystack,'=');
+		                    break;
+		                case 'like':
+		                    $query = $this->addWhere($query,$needle,$haystack,'like');
+		                    break;
+		                case 'min':
+		                    $query = $this->addWhere($query,$needle,$haystack,'>=');
+		                    break;
+		                case 'max':
+		                    $query = $this->addWhere($query,$needle,$haystack,'<=');
+		                    break;
+
+		                default:
+		                    # code...
+		                    break;
+		            }
+    			}
+    		}
+    		$query;
+    	});
+        return $q;
     }
 }
