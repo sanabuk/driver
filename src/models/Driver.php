@@ -27,7 +27,7 @@ class Driver extends Model
     ];
 	protected $table = 'drivers';
 
-    protected $hidden = ['created_at','updated_at'];
+    protected $hidden = ['updated_at'];
 
     protected static function boot()
     {
@@ -49,6 +49,6 @@ class Driver extends Model
 
     public function historic()
     {
-        return $this->hasMany(HistoryDriverVehicle::class)->with('vehicle')->latest();
+        return $this->hasMany(HistoryDriverVehicle::class)->latest();
     }
 }

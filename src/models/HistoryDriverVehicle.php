@@ -14,7 +14,7 @@ class HistoryDriverVehicle extends Model
 {
     protected $table = 'vehicle_driver_history';
 
-    protected $hidden = ['driver_id','vehicle_id','id'];
+    //protected $hidden = ['driver_id','vehicle_id','id'];
 
     /**
      * Get relation with driver
