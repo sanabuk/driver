@@ -25,6 +25,6 @@ class Vehicle extends Model
 
 	public function historic()
     {
-        return $this->hasMany(HistoryDriverVehicle::class)->with('driver')->latest();
+        return $this->hasMany(HistoryDriverVehicle::class)->latest();
     }
 }
