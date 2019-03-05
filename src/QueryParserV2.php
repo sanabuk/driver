@@ -188,6 +188,8 @@ trait QueryParserV2
                     list($type, $condition)  = $this->getConditionType($value);
                     list($needle, $haystack) = explode(':', $condition);
                     $this->checkTypeAndApplyCondition($query, $type, $needle, $haystack);
+                } else {
+                    $this->constrainsWhereHas($query, $key, $value);
                 }
             }
             $query;
