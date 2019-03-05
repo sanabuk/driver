@@ -16,9 +16,15 @@ use Illuminate\Http\Request;
 
 trait QueryParserV2
 {
+    protected $askedModel;
+
     public function getDatas(Request $request, $query)
     {
         $queryParamUrl             = $request->get('query');
+
+        preg_match('/(.*)\(/Ui',$queryParamUrl,$matches);
+        $this->askedModel = $matches[1];
+
         list($conditions, $format) = $this->split($queryParamUrl);
         $query                     = $this->handlingConditions($query, $conditions);
         $query                     = $this->handlingFormat($query, $format);
@@ -42,8 +48,8 @@ trait QueryParserV2
         preg_match('/\)({.*)/', $queryParamUrl, $matches);
         $format = $matches[1];
         $parser = new ParentheseParser();
-        $format = $parser->generate('driver' . $format, '{', '}');
-        return [$conditions['driver'], $format['driver']];
+        $format = $parser->generate($this->askedModel . $format, '{', '}');
+        return [$conditions[$this->askedModel], $format[$this->askedModel]];
     }
 
     /**
