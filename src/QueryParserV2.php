@@ -26,6 +26,7 @@ trait QueryParserV2
         $this->askedModel = $queryParamUrl['model'];
         $parser     = new ParentheseParser();
         $conditions = $parser->generate($queryParamUrl['conditions']);
+        var_dump($conditions);
         $output = $parser->generate($queryParamUrl['output']);
 
         //list($conditions, $format) = $this->split($queryParamUrl);

@@ -20,9 +20,8 @@ class ParentheseParser
 
         $naming = '';
         $this->previous_models = [];
+        $this->output = [];
         $this->depht = 0;
-
-        $this->output = array();
 
         foreach ($tokens as $key => $value) {
             switch ($value) {
@@ -104,7 +103,11 @@ class ParentheseParser
                 case 4:
                     $this->output[$this->previous_models[0]][$this->previous_models[1]][$this->previous_models[2]][$this->previous_models[3]][] = $string;
                     break;
-                
+
+                case 0:
+                    $this->output[] = $string;
+                    break;
+
                 default:
                     $this->output[] = $string;
                     break;
