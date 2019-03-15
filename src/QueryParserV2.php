@@ -26,7 +26,7 @@ trait QueryParserV2
         $this->askedModel = $queryParamUrl['model'];
         $parser     = new ParentheseParser();
         $conditions = $parser->generate($queryParamUrl['conditions']);
-        var_dump($conditions);
+        //var_dump($conditions);
         $output = $parser->generate($queryParamUrl['output']);
 
         //list($conditions, $format) = $this->split($queryParamUrl);
@@ -42,7 +42,7 @@ trait QueryParserV2
      * @param string $queryParamUrl
      * @return array
      */
-    public function split($queryParamUrl)
+    /*public function split($queryParamUrl)
     {
         preg_match('/(.*\)){/i', $queryParamUrl, $matches);
         $conditions = $matches[1];
@@ -54,7 +54,7 @@ trait QueryParserV2
         $parser = new ParentheseParser();
         $format = $parser->generate($this->askedModel . $format, '{', '}');
         return [$conditions[$this->askedModel], $format[$this->askedModel]];
-    }
+    }*/
 
     /**
      * Gestion des conditions de la requête
@@ -74,7 +74,8 @@ trait QueryParserV2
             } else {
                 // Condition sur une relation
                 $relation = $key;
-                $query = $this->constrainsWhereHas($query, $relation, $value);
+                $negation = $relation[0] == "!" ? true : false;
+                $query = $this->constrainsWhereHas($query, trim($relation,'!'), $value, $negation);
             }
         }
         return $query;
@@ -184,20 +185,35 @@ trait QueryParserV2
         return $query->where($column1, $operator, $column2);
     }
 
-    private function constrainsWhereHas($q, $model, $param)
+    private function constrainsWhereHas($q, $model, $param, $negation = false)
     {
-        $q = $q->whereHas($model, function ($query) use ($param) {
-            foreach ($param as $key => $value) {
-                if (is_integer($key)) {
-                    list($type, $condition)  = $this->getConditionType($value);
-                    list($needle, $haystack) = explode(':', $condition);
-                    $this->checkTypeAndApplyCondition($query, $type, $needle, $haystack);
-                } else {
-                    $this->constrainsWhereHas($query, $key, $value);
+        if(!$negation){
+            $q = $q->whereHas($model, function ($query) use ($param) {
+                foreach ($param as $key => $value) {
+                    if (is_integer($key)) {
+                        list($type, $condition)  = $this->getConditionType($value);
+                        list($needle, $haystack) = explode(':', $condition);
+                        $this->checkTypeAndApplyCondition($query, $type, $needle, $haystack);
+                    } else {
+                        $this->constrainsWhereHas($query, $key, $value);
+                    }
                 }
-            }
-            $query;
-        });
+                $query;
+            });
+        } else {
+            $q = $q->whereDoesntHave($model, function ($query) use ($param) {
+                foreach ($param as $key => $value) {
+                    if (is_integer($key)) {
+                        list($type, $condition)  = $this->getConditionType($value);
+                        list($needle, $haystack) = explode(':', $condition);
+                        $this->checkTypeAndApplyCondition($query, $type, $needle, $haystack);
+                    } else {
+                        $this->constrainsWhereHas($query, $key, $value);
+                    }
+                }
+                $query;
+            });
+        }
         return $q;
     }
 
