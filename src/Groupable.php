@@ -2,11 +2,13 @@
 
 namespace sanabuk\driver;
 
+use sanabuk\driver\models\Group;
+
 Trait Groupable
 {
 	public function groups()
 	{
-		return $this->morphToMany(sanabuk\driver\models\Group::class, 'groupment');
+		return $this->morphToMany(Group::class, 'groupment');
 	}
 
 	/**
