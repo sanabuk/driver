@@ -106,7 +106,7 @@ class ParentheseParser
                     break;
                 
                 default:
-                    # code...
+                    $this->output[] = $string;
                     break;
             }
         }

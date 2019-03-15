@@ -11,7 +11,8 @@ use Illuminate\Http\Request;
  * example Route : {startModel}?includes=model1,model2&equals[]=id:1&max[model1]=id:100&min[model2]=id:70
  *
  * api/driver?includes=vehicle,historic.vehicle,historic.driver&sort[historic]=-created_at&sort[]=id&fields[historic.driver]=name&fields[historic.vehicle]=license_number
- * $query = "driver(sort:id){id,vehicle{id,license_number,brand,color},historic(sort:created_at){driver{name},vehicle{license_number}}}";
+ * ?query = "driver(sort:id){id,vehicle{id,license_number,brand,color},historic(sort:created_at){driver{name},vehicle{license_number}}}";
+ * ?model=driver&conditions=max=id:10&output=
  * */
 
 trait QueryParserV2
@@ -20,14 +21,16 @@ trait QueryParserV2
 
     public function getDatas(Request $request, $query)
     {
-        $queryParamUrl             = $request->get('query');
+        $queryParamUrl             = $request->all();
 
-        preg_match('/(.*)\(/Ui',$queryParamUrl,$matches);
-        $this->askedModel = $matches[1];
+        $this->askedModel = $queryParamUrl['model'];
+        $parser     = new ParentheseParser();
+        $conditions = $parser->generate($queryParamUrl['conditions']);
+        $output = $parser->generate($queryParamUrl['output']);
 
-        list($conditions, $format) = $this->split($queryParamUrl);
+        //list($conditions, $format) = $this->split($queryParamUrl);
         $query                     = $this->handlingConditions($query, $conditions);
-        $query                     = $this->handlingFormat($query, $format);
+        $query                     = $this->handlingFormat($query, $output);
         return $query;
     }
 
