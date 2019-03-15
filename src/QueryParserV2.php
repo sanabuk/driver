@@ -21,21 +21,21 @@ trait QueryParserV2
 
     public function getDatas(Request $request, $query)
     {
-        $queryParamUrl             = $request->all();
+        $queryParamUrl = $request->all();
 
         $this->askedModel = $queryParamUrl['model'];
-        $parser     = new ParentheseParser();
-        $conditions = $parser->generate($queryParamUrl['conditions']);
-        //var_dump($conditions);
-        $output = $parser->generate($queryParamUrl['output']);
+        $parser           = new ParentheseParser();
+        $conditions       = $parser->generate($queryParamUrl['conditions']);
+        $output           = $parser->generate($queryParamUrl['output']);
 
         //list($conditions, $format) = $this->split($queryParamUrl);
-        $query                     = $this->handlingConditions($query, $conditions);
-        $query                     = $this->handlingFormat($query, $output);
+        $query = $this->handlingConditions($query, $conditions);
+        $query = $this->handlingFormat($query, $output);
         return $query;
     }
 
     /**
+     * @deprecated new request format
      * Séparer la requête en 2 parties
      * - les conditions de la requête
      * - le format de sortie attendue de la requête
@@ -44,16 +44,16 @@ trait QueryParserV2
      */
     /*public function split($queryParamUrl)
     {
-        preg_match('/(.*\)){/i', $queryParamUrl, $matches);
-        $conditions = $matches[1];
-        $parser     = new ParentheseParser();
-        $conditions = $parser->generate($conditions);
+    preg_match('/(.*\)){/i', $queryParamUrl, $matches);
+    $conditions = $matches[1];
+    $parser     = new ParentheseParser();
+    $conditions = $parser->generate($conditions);
 
-        preg_match('/\)({.*)/', $queryParamUrl, $matches);
-        $format = $matches[1];
-        $parser = new ParentheseParser();
-        $format = $parser->generate($this->askedModel . $format, '{', '}');
-        return [$conditions[$this->askedModel], $format[$this->askedModel]];
+    preg_match('/\)({.*)/', $queryParamUrl, $matches);
+    $format = $matches[1];
+    $parser = new ParentheseParser();
+    $format = $parser->generate($this->askedModel . $format, '{', '}');
+    return [$conditions[$this->askedModel], $format[$this->askedModel]];
     }*/
 
     /**
@@ -70,12 +70,12 @@ trait QueryParserV2
                 // Conditions sur le modèle de base de la requête
                 list($type, $condition)  = $this->getConditionType($value);
                 list($needle, $haystack) = explode(':', $condition);
-                $query = $this->checkTypeAndApplyCondition($query, $type, $needle, $haystack);
+                $query                   = $this->checkTypeAndApplyCondition($query, $type, $needle, $haystack);
             } else {
                 // Condition sur une relation
                 $relation = $key;
                 $negation = $relation[0] == "!" ? true : false;
-                $query = $this->constrainsWhereHas($query, trim($relation,'!'), $value, $negation);
+                $query    = $this->constrainsWhereHas($query, trim($relation, '!'), $value, $negation);
             }
         }
         return $query;
@@ -113,8 +113,6 @@ trait QueryParserV2
 
     private function constrainsSelectAndSortAndWhere($q, $model, $param)
     {
-        //dd($param);
-        //foreach ($param as $key => $value) {
         foreach ($param as $key => $v) {
             if (is_integer($key)) {
                 if ($this->isSort($key)) {
@@ -140,8 +138,6 @@ trait QueryParserV2
                 $q = $this->addEagerLoadRelation($q, $key, $v);
             }
         }
-
-        //}
         return $q;
     }
 
@@ -187,7 +183,7 @@ trait QueryParserV2
 
     private function constrainsWhereHas($q, $model, $param, $negation = false)
     {
-        if(!$negation){
+        if (!$negation) {
             $q = $q->whereHas($model, function ($query) use ($param) {
                 foreach ($param as $key => $value) {
                     if (is_integer($key)) {
