@@ -89,19 +89,18 @@ trait QueryParserV2
 
     private function handlingFormat($query, $format)
     {
-        //dd($format);
+        $selectArray = $this->config[$this->askedModel];
         foreach ($format as $key => $value) {
             if (is_integer($key)) {
                 // Conditions sur le modèle de base de la requête
-                $_value[] = $value;
-                $selectArray = array_merge($_value,$this->config[$this->askedModel]);
+                $selectArray[] = $value;
             } else {
                 // Condition sur une relation
                 $relation = $key;
                 $query    = $this->addEagerLoadRelation($query, $relation, $value);
             }
-            $query = $query->select($selectArray);
         }
+        $query = $query->select($selectArray);
         return $query;
     }
 
@@ -120,6 +119,7 @@ trait QueryParserV2
 
     private function constrainsSelectAndSortAndWhere($q, $model, $param)
     {
+        $selectArray = $this->config[$model];
         foreach ($param as $key => $v) {
             if (is_integer($key)) {
                 if ($this->isSort($key)) {
@@ -130,7 +130,7 @@ trait QueryParserV2
                     }
                 }
                 if ($this->isSelect($key)) {
-                    $q = $this->addSelect($q, array_merge(explode(',', $v),$this->config[$model]));
+                    $selectArray[] = $v;
                 }
                 if ($this->isWhere($key)) {
                     $operator = [
@@ -145,6 +145,7 @@ trait QueryParserV2
                 $q = $this->addEagerLoadRelation($q, $key, $v);
             }
         }
+        $q = $this->addSelect($q, $selectArray);
         return $q;
     }
 
@@ -160,8 +161,6 @@ trait QueryParserV2
 
     private function addSelect($query, $column)
     {
-        //todo Gérer les PrimaryKey et les foreignKey
-        //$column[] = 'id';
         return $query->select($column);
     }
 
