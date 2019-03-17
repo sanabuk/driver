@@ -19,6 +19,12 @@ trait QueryParserV2
 {
     protected $askedModel;
 
+    protected $config = [
+        'driver' => ['id'],
+        'vehicle' => ['id','driver_id'],
+        'historic' => ['driver_id','vehicle_id']
+    ];
+
     public function getDatas(Request $request, $query)
     {
         $queryParamUrl = $request->all();
@@ -87,7 +93,8 @@ trait QueryParserV2
         foreach ($format as $key => $value) {
             if (is_integer($key)) {
                 // Conditions sur le modèle de base de la requête
-                $selectArray[] = $value;
+                $_value[] = $value;
+                $selectArray = array_merge($_value,$this->config[$this->askedModel]);
             } else {
                 // Condition sur une relation
                 $relation = $key;
@@ -123,7 +130,7 @@ trait QueryParserV2
                     }
                 }
                 if ($this->isSelect($key)) {
-                    $q = $this->addSelect($q, explode(',', $v));
+                    $q = $this->addSelect($q, array_merge(explode(',', $v),$this->config[$model]));
                 }
                 if ($this->isWhere($key)) {
                     $operator = [
@@ -154,7 +161,7 @@ trait QueryParserV2
     private function addSelect($query, $column)
     {
         //todo Gérer les PrimaryKey et les foreignKey
-        $column[] = 'id';
+        //$column[] = 'id';
         return $query->select($column);
     }
 
