@@ -8,17 +8,15 @@ use Illuminate\Http\Request;
  *
  * Test to generate Eloquent Request with Url Parameters
  *
- * example Route : {startModel}?includes=model1,model2&equals[]=id:1&max[model1]=id:100&min[model2]=id:70
- *
- * api/driver?includes=vehicle,historic.vehicle,historic.driver&sort[historic]=-created_at&sort[]=id&fields[historic.driver]=name&fields[historic.vehicle]=license_number
- * ?query = "driver(sort:id){id,vehicle{id,license_number,brand,color},historic(sort:created_at){driver{name},vehicle{license_number}}}";
- * ?model=driver&conditions=max=id:10&output=
+ * example Route : 
+ * ?model=driver&conditions=max=id:100,...,&output=...
  * */
 
 trait QueryParserV2
 {
     protected $askedModel;
 
+    //TODO create config file
     protected $config = [
         'driver' => ['id'],
         'vehicle' => ['id','driver_id'],
@@ -34,33 +32,10 @@ trait QueryParserV2
         $conditions       = $parser->generate($queryParamUrl['conditions']);
         $output           = $parser->generate($queryParamUrl['output']);
 
-        //list($conditions, $format) = $this->split($queryParamUrl);
         $query = $this->handlingConditions($query, $conditions);
         $query = $this->handlingFormat($query, $output);
         return $query;
     }
-
-    /**
-     * @deprecated new request format
-     * Séparer la requête en 2 parties
-     * - les conditions de la requête
-     * - le format de sortie attendue de la requête
-     * @param string $queryParamUrl
-     * @return array
-     */
-    /*public function split($queryParamUrl)
-    {
-    preg_match('/(.*\)){/i', $queryParamUrl, $matches);
-    $conditions = $matches[1];
-    $parser     = new ParentheseParser();
-    $conditions = $parser->generate($conditions);
-
-    preg_match('/\)({.*)/', $queryParamUrl, $matches);
-    $format = $matches[1];
-    $parser = new ParentheseParser();
-    $format = $parser->generate($this->askedModel . $format, '{', '}');
-    return [$conditions[$this->askedModel], $format[$this->askedModel]];
-    }*/
 
     /**
      * Gestion des conditions de la requête
@@ -119,12 +94,27 @@ trait QueryParserV2
         return $query;
     }
 
+    /**
+     * Add Eager Load
+     * @param Builder $query
+     * @param string $relation
+     * @param array $param
+     * @param int $counter
+     * @return Builder
+     */
     private function addEagerLoadRelation($query, $relation, $param, $counter = 0)
     {
         $query = $query->with([$relation => $this->getCallback($relation, $counter, $param)]);
         return $query;
     }
 
+    /**
+     * Get callback function for eager load
+     * @param string $relation
+     * @param int $counter
+     * @param array $param
+     * @return function
+     */
     private function getCallback($relation, $counter, $param)
     {
         return function ($q) use ($relation, $counter, $param) {
@@ -132,6 +122,11 @@ trait QueryParserV2
         };
     }
 
+    /**
+     * @param Builder $q
+     * @param string $model
+     * @param array $param
+     */
     private function constrainsSelectAndSortAndWhere($q, $model, $param)
     {
         $selectArray = $this->config[$model];
