@@ -64,7 +64,7 @@ trait QueryParserV2
 
     /**
      * Gestion des conditions de la requête
-     * Equivalent WhereHas de Eloquent
+     * Eloquent whereHas
      * @param Builder $query
      * @param array $conditions
      * @return Builder $query
@@ -87,16 +87,23 @@ trait QueryParserV2
         return $query;
     }
 
+    /**
+     * Gestion du format de sortie de la requête
+     * Eloquent EagerLoad
+     * @param Builder $query
+     * @param array $format
+     * @return Builder $query
+     */
     private function handlingFormat($query, $format)
     {
         $selectArray = $this->config[$this->askedModel];
         foreach ($format as $key => $value) {
             if (is_integer($key)) {
                 // Conditions sur le modèle de base de la requête
-                if (preg_match('/(.*)=(.*)/', $value, $matches)==1) {
-                    if($this->isSort($matches[1])){
-                        $column  = trim($matches[2], '-');
-                        $operator = $matches[2][0] == '-' ? 'DESC' : 'ASC';
+                if (preg_match('/(?<type>.*)=(?<column>.*)/', $value, $matches)==1) {
+                    if($this->isSort($matches['type'])){
+                        $column  = trim($matches['column'], '-');
+                        $operator = $matches['column'][0] == '-' ? 'DESC' : 'ASC';
                         $query    = $this->addSort($query, $column, $operator);
                     }
                 } else {
