@@ -57,13 +57,14 @@ class AssociateDriverWithVehicle extends Vehicle
      */
     public function detachDriverToVehicle($driver, $vehicle)
     {
-        if (count($driver->vehicle) > 0) {
+        if (isset($driver->vehicle) && count($driver->vehicle) > 0) {
             $driver->vehicle()->update(['driver_id' => null]);
             DB::table('vehicle_driver_history')
                 ->where('driver_id',$driver->id)
                 ->whereNull('updated_at')
                 ->update(['updated_at'=>Carbon::now()]);
         }
+        //dd(count($vehicle->driver()->count()));
 
         if (count($vehicle->driver) > 0) {
             DB::table('vehicle_driver_history')
