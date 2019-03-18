@@ -93,7 +93,15 @@ trait QueryParserV2
         foreach ($format as $key => $value) {
             if (is_integer($key)) {
                 // Conditions sur le modèle de base de la requête
-                $selectArray[] = $value;
+                if (preg_match('/(.*)=(.*)/', $value, $matches)==1) {
+                    if($this->isSort($matches[1])){
+                        $column  = trim($matches[2], '-');
+                        $operator = $matches[2][0] == '-' ? 'DESC' : 'ASC';
+                        $query    = $this->addSort($query, $column, $operator);
+                    }
+                } else {
+                    $selectArray[] = $value;
+                }
             } else {
                 // Condition sur une relation
                 $relation = $key;
