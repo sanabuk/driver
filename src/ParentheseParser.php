@@ -96,37 +96,38 @@ class ParentheseParser
             default:
                 # code...
                 break;
-                return $this->output;
         }
-
-        private function addConstrains($string)
-        {
-            switch (count($this->previous_models)) {
-                case 1:
-                    $this->output[$this->previous_models[0]][] = $string;
-                    break;
-
-                case 2:
-                    $this->output[$this->previous_models[0]][$this->previous_models[1]][] = $string;
-                    break;
-
-                case 3:
-                    $this->output[$this->previous_models[0]][$this->previous_models[1]][$this->previous_models[2]][] = $string;
-                    break;
-
-                case 4:
-                    $this->output[$this->previous_models[0]][$this->previous_models[1]][$this->previous_models[2]][$this->previous_models[3]][] = $string;
-                    break;
-
-                case 0:
-                    $this->output[] = $string;
-                    break;
-
-                default:
-                    $this->output[] = $string;
-                    break;
-            }
-            return $this->output;
-        }
-
+        return $this->output;
     }
+
+    private function addConstrains($string)
+    {
+        switch (count($this->previous_models)) {
+            case 1:
+                $this->output[$this->previous_models[0]][] = $string;
+                break;
+
+            case 2:
+                $this->output[$this->previous_models[0]][$this->previous_models[1]][] = $string;
+                break;
+
+            case 3:
+                $this->output[$this->previous_models[0]][$this->previous_models[1]][$this->previous_models[2]][] = $string;
+                break;
+
+            case 4:
+                $this->output[$this->previous_models[0]][$this->previous_models[1]][$this->previous_models[2]][$this->previous_models[3]][] = $string;
+                break;
+
+            case 0:
+                $this->output[] = $string;
+                break;
+
+            default:
+                $this->output[] = $string;
+                break;
+        }
+        return $this->output;
+    }
+
+}
