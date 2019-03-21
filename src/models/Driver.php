@@ -21,10 +21,6 @@ class Driver extends Model
 
 	protected $fillable = ['name','user_id'];
 	protected $primaryKey = 'id';
-    protected $_foreignKeys = [
-        'vehicle' => 'driver_id',
-        'historic' => 'driver_id'
-    ];
 	protected $table = 'drivers';
 
     protected $hidden = ['updated_at'];

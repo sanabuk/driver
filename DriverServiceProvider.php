@@ -13,7 +13,7 @@ class DriverServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->loadMigrationsFrom('src/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../migrations/create_driver_test_table.php');
     }
 
     public function register()
